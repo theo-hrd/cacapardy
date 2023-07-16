@@ -99,6 +99,16 @@ services:
             - '/dev/shm:/dev/shm'
         networks:
             - sail
+    phpmyadmin:
+        image: 'phpmyadmin:latest'
+        environment:
+            - PMA_ARBITRATY=true
+            - PMA_HOST=mysql
+            - UPLOAD_LIMIT=1000M
+        ports:
+            - '81:80'
+        networks:
+            - sail
 networks:
     sail:
         driver: bridge

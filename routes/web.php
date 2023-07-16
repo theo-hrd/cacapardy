@@ -1,9 +1,11 @@
 <?php
 
+use App\Http\Controllers\DiscordController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
+use Laravel\Socialite\Facades\Socialite;
 
 /*
 |--------------------------------------------------------------------------
@@ -17,13 +19,26 @@ use Inertia\Inertia;
 */
 
 Route::get('/', function () {
-    return Inertia::render('Welcome', [
-        'canLogin' => Route::has('login'),
-        'canRegister' => Route::has('register'),
-        'laravelVersion' => Application::VERSION,
-        'phpVersion' => PHP_VERSION,
-    ]);
+    //$user = Socialite::driver('discord')->user();
+    dump(Auth::user(), Auth::check());
+    $req = Illuminate\Support\Facades\Request::get('https://cdn.discordapp.com/avatars/'. Auth::user()->discord_id.'/'.Auth::user()->id .'.png');
+    dd($req);
+    //$user = Socialite::driver('discord')->user();
+    //return Inertia::render('Welcome', [
+    //    'canLogin' => Route::has('login'),
+    //    'canRegister' => Route::has('register'),
+    //    'laravelVersion' => Application::VERSION,
+    //    'phpVersion' => PHP_VERSION,
+    //    //'token' => $user->token,
+    //]);
 });
+
+Route::get('/login', [DiscordController::class, 'redirectToProvider'])->name('discord.redirect');
+Route::get('/discord/callback', [DiscordController::class, 'handleProviderCallback'])->name('discord.callback');
+
+Route::get('test', function () {
+    return dump(Auth::user(), Auth::check());
+})->name('test');
 
 Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');
