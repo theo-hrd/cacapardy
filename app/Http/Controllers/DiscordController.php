@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
 use Laravel\Socialite\Facades\Socialite;
 
 class DiscordController extends Controller
@@ -36,6 +35,6 @@ class DiscordController extends Controller
 
         Auth::login($user, true);
 
-        return redirect()->route('test');
+        return redirect()->route('dashboard');
     }
 }

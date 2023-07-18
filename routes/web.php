@@ -18,36 +18,20 @@ use Laravel\Socialite\Facades\Socialite;
 |
 */
 
-Route::get('/', function () {
-    //$user = Socialite::driver('discord')->user();
-    dump(Auth::user(), Auth::check());
-    $req = Illuminate\Support\Facades\Request::get('https://cdn.discordapp.com/avatars/'. Auth::user()->discord_id.'/'.Auth::user()->id .'.png');
-    dd($req);
-    //$user = Socialite::driver('discord')->user();
-    //return Inertia::render('Welcome', [
-    //    'canLogin' => Route::has('login'),
-    //    'canRegister' => Route::has('register'),
-    //    'laravelVersion' => Application::VERSION,
-    //    'phpVersion' => PHP_VERSION,
-    //    //'token' => $user->token,
-    //]);
-});
+//Route::get('/', function () {
+//        Inertia::render('Welcome', [
+//        'canLogin' => Auth::check() == false,
+//        'canLogout' => Auth::check(),
+//        'laravelVersion' => Application::VERSION,
+//        'phpVersion' => PHP_VERSION,
+//    ]);
+//})->name('homepage');
 
-Route::get('/login', [DiscordController::class, 'redirectToProvider'])->name('discord.redirect');
-Route::get('/discord/callback', [DiscordController::class, 'handleProviderCallback'])->name('discord.callback');
-
-Route::get('test', function () {
-    return dump(Auth::user(), Auth::check());
-})->name('test');
+Route::get('/', [DiscordController::class, 'redirectToProvider'])->name('login');
 
 Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
-Route::middleware('auth')->group(function () {
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-});
 
 require __DIR__.'/auth.php';
